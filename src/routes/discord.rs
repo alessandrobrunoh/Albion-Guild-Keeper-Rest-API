@@ -9,22 +9,21 @@ use crate::controllers::discord as controllers;
 struct DiscordServerInput {
     discord_name: String,
     joined_at: String,
-    balance: SurrealInt,
 }
 
 #[put("/discord/{discord_id}")]
 pub async fn join_discord(discord_id: Path<SurrealInt>, discord_data: Json<DiscordServerInput>) -> HttpResponse {
     let discord_name = discord_data.discord_name.clone();
     let joined_at = discord_data.joined_at.clone();
-    let balance = discord_data.balance.clone();
     
-    let result = controllers::join_discord(discord_id.into_inner(), discord_name, joined_at, balance).await;
+    let result = controllers::join_discord(discord_id.into_inner(), discord_name, joined_at).await;
 
-    println!("result: {:?}", result);   
+    println!("result: {:?}", result);   // @todo qui per qualche motivo da errore
+    // app] result: Err(Db(Serialization("failed to deserialize; expected a 64-bit signed integer, found $surrealdb::private::sql::Thing { tb: \"discords\", id: Id::Number(1348909995638390834i64) }")))
 
     match result {
-        Ok(Some(_)) => HttpResponse::Ok().body("success"),
-        Ok(None) => HttpResponse::InternalServerError().body("error"),    
-        Err(_) => HttpResponse::InternalServerError().body("error"),
+        Ok(Some(_)) => HttpResponse::Ok().body("success record already exists"),
+        Ok(None) => HttpResponse::Ok().body("success created a new record"),    
+        Err(_) => HttpResponse::InternalServerError().body("aaaa"),
     }
 }

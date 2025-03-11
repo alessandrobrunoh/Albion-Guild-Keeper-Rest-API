@@ -14,13 +14,14 @@ use crate::routes::{
     auth_discord::auth_discord,
     discord::join_discord,
     test::test,
+    user::join_user
 };
 
 #[get("/")]
 async fn admin_check() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json(json!({ "is_admin": true }))
+        .json(json!({ "is_admin": false }))
 }
 
 #[get("/create_user")]
@@ -45,6 +46,7 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut web::ServiceConfig) + Send +
                 .service(auth_discord)
                 .service(join_discord)
                 .service(test)
+                .service(join_user)
         );
     };
 
