@@ -1,8 +1,8 @@
 use actix_web::{web::Query, HttpResponse};
 
-use crate::models::authentication::AuthDiscord;
+use crate::models::auth::auth::Auth;
 
-pub async fn auth_discord(query: Query<AuthDiscord>) -> HttpResponse {
+pub async fn login(query: Query<Auth>) -> HttpResponse {
     // Poiché i campi `token_type` e `token` sono privati, dobbiamo implementare metodi pubblici in `AuthDiscord` per ottenere questi valori.
     let token_type = &query.token_type; // Accesso diretto ai campi privati
     let token = &query.access_token; // Accesso diretto ai campi privati
