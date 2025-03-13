@@ -10,26 +10,12 @@ mod routes;
 mod utils;
 
 use crate::routes::{
-    auth::login::login, discord::join_discord, hello_world::hello_world, test::test,
+    auth::login::login, discord::join_discord, test::test,
     user::join_user, auth::auth::auth as is_auth,
 };
 
-// use cookie_rs::{Cookie, CookieJar};
-
 #[get("/")]
 async fn admin_check() -> HttpResponse {
-    // let mut jar = CookieJar::default();
-    // // Add a cookie
-    // let cookie = Cookie::new("user", "john").with_path("/").with_domain("localhost");
-    // jar.add(cookie);
-    // // Retrieve a cookie
-    // if let Some(cookie) = jar.get("user") {
-    //     println!("Found cookie: {}={}.", cookie.name(), cookie.value());
-    // } else {
-    //     println!("Cookie not found.");
-    // }
-    // @todo Non funziona da fixare
-
     HttpResponse::Ok()
         .content_type("application/json")
         .json(json!({ "is_admin": true }))
@@ -47,7 +33,6 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut web::ServiceConfig) + Send +
             web::scope("/api/v1")
                 .wrap(cors)
                 .service(admin_check)
-                .service(hello_world)
                 .service(login)
                 .service(join_discord)
                 .service(test)
@@ -55,7 +40,7 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut web::ServiceConfig) + Send +
                 .service(is_auth),
         );
     };
-
+    
     println!("Starting server at http://localhost:8000");
     Ok(config.into())
 }
