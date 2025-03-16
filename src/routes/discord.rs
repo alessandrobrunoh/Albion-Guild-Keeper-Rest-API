@@ -6,13 +6,13 @@ use crate::controllers::discord as controllers;
 
 
 #[derive(Deserialize)]
-struct DiscordServerInput {
+struct DiscordInput {
     discord_name: String,
     joined_at: String,
 }
 
 #[put("/discord/{discord_id}")]
-pub async fn join_discord(discord_id: Path<SurrealInt>, discord_data: Json<DiscordServerInput>) -> HttpResponse {
+pub async fn join_discord(discord_id: Path<SurrealInt>, discord_data: Json<DiscordInput>) -> HttpResponse {
     let discord_name = discord_data.discord_name.clone();
     let joined_at = discord_data.joined_at.clone();
     
